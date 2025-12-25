@@ -2,20 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Draggable Cubes</title>
+  <title>Draggable HTML Elements</title>
 
   <style>
     body {
       display: flex;
       justify-content: center;
       margin-top: 40px;
-      font-family: Arial, sans-serif;
     }
 
     .container {
-      width: 400px;
-      height: 400px;
-      border: 2px solid #000;
+      width: 360px;
+      height: 360px;
+      border: 2px solid black;
       position: relative;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -27,13 +26,9 @@
     .cube {
       width: 60px;
       height: 60px;
-      background-color: #4caf50;
-      cursor: grab;
+      background-color: steelblue;
       position: relative;
-    }
-
-    .cube:active {
-      cursor: grabbing;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -50,44 +45,40 @@
     const container = document.getElementById("container");
     const cubes = document.querySelectorAll(".cube");
 
-    let selectedCube = null;
+    let activeCube = null;
     let offsetX = 0;
     let offsetY = 0;
 
     cubes.forEach(cube => {
       cube.addEventListener("mousedown", (e) => {
-        selectedCube = cube;
+        activeCube = cube;
 
         const rect = cube.getBoundingClientRect();
         offsetX = e.clientX - rect.left;
         offsetY = e.clientY - rect.top;
 
         cube.style.position = "absolute";
-        cube.style.zIndex = 1000;
       });
     });
 
     document.addEventListener("mousemove", (e) => {
-      if (!selectedCube) return;
+      if (!activeCube) return;
 
       const containerRect = container.getBoundingClientRect();
 
       let x = e.clientX - containerRect.left - offsetX;
       let y = e.clientY - containerRect.top - offsetY;
 
-      // Boundary constraints
-      x = Math.max(0, Math.min(x, container.clientWidth - selectedCube.offsetWidth));
-      y = Math.max(0, Math.min(y, container.clientHeight - selectedCube.offsetHeight));
+      // Boundary conditions
+      x = Math.max(0, Math.min(x, container.clientWidth - activeCube.offsetWidth));
+      y = Math.max(0, Math.min(y, container.clientHeight - activeCube.offsetHeight));
 
-      selectedCube.style.left = x + "px";
-      selectedCube.style.top = y + "px";
+      activeCube.style.left = x + "px";
+      activeCube.style.top = y + "px";
     });
 
     document.addEventListener("mouseup", () => {
-      if (selectedCube) {
-        selectedCube.style.zIndex = 1;
-        selectedCube = null;
-      }
+      activeCube = null;
     });
   </script>
 
