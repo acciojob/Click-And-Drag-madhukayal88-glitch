@@ -1,18 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Draggable Cubes</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container" id="container">
-        <div class="cube" id="cube1"></div>
-        <div class="cube" id="cube2"></div>
-        <div class="cube" id="cube3"></div>
-        <div class="cube" id="cube4"></div>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
+<style>
+  .container {
+    width: 500px;
+    height: 400px;
+    border: 2px solid #333;
+    background-color: #f0f0f0;
+    position: relative;
+    overflow: hidden;
+    margin: 20px auto;
+  }
+
+  .cube {
+    width: 50px;
+    height: 50px;
+    background-color: #3498db;
+    border: 1px solid #2980b9;
+    position: absolute;
+    cursor: grab;
+    touch-action: none; /* Prevents scrolling on mobile while dragging */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+  }
+
+  .cube:active {
+    cursor: grabbing;
+    z-index: 1000; /* Bring selected cube to front */
+  }
+</style>
+
+<div class="container" id="boundary">
+  <div class="cube">1</div>
+  <div class="cube">2</div>
+  <div class="cube">3</div>
+  <div class="cube">4</div>
+  <div class="cube">5</div>
+  <div class="cube">6</div>
+</div>
