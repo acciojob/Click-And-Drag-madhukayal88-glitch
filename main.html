@@ -1,23 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Draggable Cubes</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Draggable Cubes</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h2 {
+  margin-top: 20px;
+}
+
+.container {
+  width: 520px;
+  height: 420px;
+  border: 3px solid #22d3ee;
+  margin-top: 20px;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  background: #020617;
+}
+
+.cube {
+  width: 70px;
+  height: 70px;
+  background: #f43f5e;
+  border-radius: 10px;
+  cursor: grab;
+  position: relative;
+  user-select: none;
+}
+
+.cube:active {
+  cursor: grabbing;
+  box-shadow: 0 0 15px #f43f5e;
+}
+</style>
 </head>
+
 <body>
 
-  <h2 style="text-align:center;">Draggable Cubes</h2>
+<h2>Draggable Cubes</h2>
 
-  <div class="container" id="container">
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-  </div>
+<div class="container" id="container">
+  <div class="cube"></div>
+  <div class="cube"></div>
+  <div class="cube"></div>
+  <div class="cube"></div>
+  <div class="cube"></div>
+  <div class="cube"></div>
+</div>
 
-  <script src="script.js"></script>
+<script>
+const container = document.getElementById("container");
+const cubes = document.querySelectorAll(".cube");
+
+let selectedCube = null;
+let offsetX = 0;
+let offsetY = 0;
+
+cubes.forEach(cube => {
+  cube.addEventListener("mousedown", (e) => {
+    selectedCube = cube;
+
+    const rect = cube.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+
+    cube.style.position = "absolute";
+    cube.style.zIndex = 1000;
+
+    document.addEventListener("mousemove", moveCube);
+    document.addEventListener("mouseup", dropCube);
+  });
+});
+
+function moveCube(e) {
+  if (!selectedCube) return;
+
+  const containerRect = container.getBoundingClientRect();
+
+  let x = e.clientX - containerRect.left - offsetX;
+  let y = e.clientY - containerRect.top - offsetY;
+
+  const maxX = container.clientWidth - selectedCube.offsetWidth;
+  const maxY = container.clientHeight - selectedCube.offsetHeight;
+
+  // Boundary restriction
+  x = Math.max(0, Math.min(x, maxX));
+  y = Math.max(0, Math.min(y, maxY));
+
+  selectedCube.style.left = x + "px";
+  selectedCube.style.top = y + "px";
+}
+
+function dropCube() {
+  document.removeEventListener("mousemove", moveCube);
+  document.removeEventListener("mouseup", dropCube);
+  selectedCube = null;
+}
+</script>
+
 </body>
 </html>
